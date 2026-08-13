@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Personal Task & Todo Tracker — manage your daily tasks efficiently." />
+  <title>Todo Tracker | Task Manager</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- Background Blobs -->
+  <div class="bg-blob blob-1"></div>
+  <div class="bg-blob blob-2"></div>
+
+  <div class="app-wrapper">
+
+    <!-- Header -->
+    <header class="header">
+      <div class="header-left">
+        <div class="logo">
+          <span class="logo-icon">✅</span>
+          <span class="logo-text">TodoTracker</span>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="stats-bar">
+          <div class="stat">
+            <span class="stat-num" id="totalCount">0</span>
+            <span class="stat-label">Total</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat">
+            <span class="stat-num" id="doneCount">0</span>
+            <span class="stat-label">Done</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat">
+            <span class="stat-num" id="pendingCount">0</span>
+            <span class="stat-label">Pending</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="main-content">
+
+      <!-- Add Todo Card -->
+      <section class="add-card">
+        <h1 class="add-card-title">Add New Task</h1>
+        <form id="todoForm" class="todo-form">
+          <div class="form-row">
+            <div class="input-group">
+              <label for="todoTitle">Task Title <span class="required">*</span></label>
+              <input
+                type="text"
+                id="todoTitle"
+                placeholder="What do you need to do?"
+                maxlength="100"
+                autocomplete="off"
+                required
+              />
+            </div>
+            <div class="input-group">
+              <label for="todoDescription">Description</label>
+              <input
+                type="text"
+                id="todoDescription"
+                placeholder="Add a short description (optional)"
+                maxlength="255"
+                autocomplete="off"
+              />
+            </div>
+          </div>
+          <button type="submit" id="submitBtn" class="btn btn-primary">
+            <span class="btn-icon">+</span>
+            <span id="submitBtnText">Add Task</span>
+          </button>
+        </form>
+      </section>
+
+      <!-- Filter Bar -->
+      <div class="filter-bar">
+        <button class="filter-btn active" id="filterAll" onclick="setFilter('all')">All</button>
+        <button class="filter-btn" id="filterPending" onclick="setFilter('pending')">Pending</button>
+        <button class="filter-btn" id="filterCompleted" onclick="setFilter('completed')">Completed</button>
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="searchInput" placeholder="Search tasks..." oninput="renderTodos()" />
+        </div>
+      </div>
+
+      <!-- Toast Notification -->
+      <div id="toast" class="toast" role="alert"></div>
+
+      <!-- Todo List -->
+      <section class="todo-list-section">
+        <div id="loadingSpinner" class="loading-spinner">
+          <div class="spinner"></div>
+          <p>Loading tasks...</p>
+        </div>
+        <div id="todoList" class="todo-list"></div>
+        <div id="emptyState" class="empty-state" style="display:none;">
+          <div class="empty-icon">📝</div>
+          <h3>No tasks found</h3>
+          <p>Add your first task above to get started!</p>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Edit Modal -->
+  <div id="editModal" class="modal-overlay" style="display:none;">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h2>Edit Task</h2>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+      </div>
+      <form id="editForm" class="todo-form">
+        <div class="input-group">
+          <label for="editTitle">Task Title <span class="required">*</span></label>
+          <input type="text" id="editTitle" placeholder="Task title" maxlength="100" required />
+        </div>
+        <div class="input-group">
+          <label for="editDescription">Description</label>
+          <input type="text" id="editDescription" placeholder="Description (optional)" maxlength="255" />
+        </div>
+        <input type="hidden" id="editId" />
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Delete Confirm Modal -->
+  <div id="deleteModal" class="modal-overlay" style="display:none;">
+    <div class="modal-card modal-small">
+      <div class="modal-header">
+        <h2>Delete Task?</h2>
+        <button class="modal-close" onclick="closeDeleteModal()">&times;</button>
+      </div>
+      <p class="delete-msg">This action cannot be undone. Are you sure?</p>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" onclick="closeDeleteModal()">Cancel</button>
+        <button class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="Todo.js"></script>
+</body>
+</html>
